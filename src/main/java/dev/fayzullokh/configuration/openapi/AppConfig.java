@@ -32,8 +32,9 @@ public class AppConfig {
                         .url("https://springshop.wiki.github.org/docs"))
                 .servers(List.of(
                         new Server().url("http://localhost:9999").description("Development Server"),
-                        new Server().url("http://192.168.68.101:8080").description("Production Server"),
-                        new Server().url("http://localhost:9090").description("Test Server")
+                        new Server().url("http://localhost:8080").description("Production Server"),
+                        new Server().url("http://localhost:9992").description("stg server"),
+                        new Server().url("http://localhost:9991").description("Local Server")
                 )).addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components((new Components()
                         .addSecuritySchemes("bearerAuth", new SecurityScheme()

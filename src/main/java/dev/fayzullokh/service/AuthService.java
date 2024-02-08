@@ -8,14 +8,14 @@ import dev.fayzullokh.entity.User;
 import dev.fayzullokh.enums.TokenType;
 import dev.fayzullokh.exceptions.NotFoundException;
 import dev.fayzullokh.repositories.UserRepository;
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,6 +30,8 @@ public class AuthService {
     private final JwtUtils jwtTokenUtil;
     private final PasswordEncoder passwordEncoder;
 
+    @Timed(value = "auth_service_generate_token_time", description = "Time taken to generate token")
+    @Counted(value = "auth_service_generate_token_count", description = "Number of times generateToken method is called")
     public TokenResponse generateToken(@NonNull TokenRequest tokenRequest) throws NotFoundException {
         String username = tokenRequest.username();
         String password = tokenRequest.password();
@@ -54,6 +56,7 @@ public class AuthService {
         }
     }
 
+    @Timed(value = "auth_service_refresh_token_time", description = "Time taken to refresh token")
     public TokenResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
         String refreshToken = refreshTokenRequest.refreshToken();
 
@@ -74,4 +77,5 @@ public class AuthService {
 
         return jwtTokenUtil.generateAccessToken(username, tokenResponse);
     }
+
 }
