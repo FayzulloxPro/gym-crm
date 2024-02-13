@@ -55,7 +55,7 @@ public class AuthService {
             throw new BadCredentialsException("Bad credentials");
         }
     }
-
+// for fun
     @Timed(value = "auth_service_refresh_token_time", description = "Time taken to refresh token")
     public TokenResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
         String refreshToken = refreshTokenRequest.refreshToken();
