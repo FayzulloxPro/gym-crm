@@ -17,6 +17,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import static dev.fayzullokh.enums.TokenType.ACCESS;
 
@@ -24,6 +26,12 @@ import static dev.fayzullokh.enums.TokenType.ACCESS;
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private final JwtUtils jwtUtils;
     private final UserDetailsService userDetailsService;
+
+    private static final int MAX_ATTEMPTS = 3;
+    private static final long BLOCK_DURATION = TimeUnit.MINUTES.toMillis(5);
+
+    private final ConcurrentHashMap<String, Integer> loginAttemptsCache = new ConcurrentHashMap<>();
+
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -38,7 +46,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         final String JWToken = authHeader.substring(7);
         final String username = jwtUtils.getUsername(JWToken, ACCESS);
 
-        if (username != null) {
+        if (username != null ) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if (jwtUtils.isTokenValid(JWToken, ACCESS)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
@@ -48,5 +56,11 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+
+    private boolean isBlocked(String username) {
+        Integer attempts = loginAttemptsCache.get(username);
+        return attempts != null && attempts >= MAX_ATTEMPTS;
     }
 }
