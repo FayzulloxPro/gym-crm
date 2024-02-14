@@ -54,7 +54,7 @@ class TrainerControllerTest {
 
     @Test
     void createTrainer_ValidTrainerRegistrationDto_CreatedSuccessfully() throws NotFoundException {
-        TrainerRegistrationDto trainerRegistrationDto = new TrainerRegistrationDto("John", "Doe", 1L);
+        TrainerRegistrationDto trainerRegistrationDto = new TrainerRegistrationDto("John", "Doe", 1L, "password");
 
         when(userService.getUserById(anyLong())).thenReturn(new User());
         when(trainingTypeService.findById(anyLong())).thenReturn(new TrainingType());

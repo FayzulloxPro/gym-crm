@@ -55,7 +55,7 @@ public class TrainerController {
     @PostMapping
     public ResponseEntity<CreatedResponseDTO> createTrainer(@RequestBody @Valid TrainerRegistrationDto dto) throws NotFoundException {
         log.info("Received request to register trainer with DTO: {}", dto);
-        User user = userMapper.toUser(dto.getFirstName(), dto.getLastName());
+        User user = userMapper.toUser(dto);
         TrainingType trainingType = trainingTypeService.findById(dto.getTrainingTypeId());
         Trainer trainer=new Trainer();
         trainer.setUser(user);

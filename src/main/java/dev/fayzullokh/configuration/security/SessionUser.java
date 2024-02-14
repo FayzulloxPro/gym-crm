@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -20,10 +21,13 @@ public class SessionUser {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         Object principal = authentication.getPrincipal();
-        if (!Objects.isNull(principal))
-            return userRepository.findByUsername(principal.toString()).orElseThrow(
-                    () -> new NotFoundException("User not found")
-            );
+        if (!Objects.isNull(principal)) {
+            User byUsername = userRepository.findByUsername(principal.toString());
+            if (Objects.isNull(byUsername)) {
+                throw new UsernameNotFoundException("Username '%s' not found".formatted(principal.toString()));
+            }
+            return byUsername;
+        }
         return null;
     }
 

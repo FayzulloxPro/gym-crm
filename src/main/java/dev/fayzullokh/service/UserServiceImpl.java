@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private SessionUser sessionUser;
 
-    @Override
+    /*@Override
     public User createUser(User user) {
         log.debug("Creating user: {}", user);
         user.setUsername(generateUserName(user.getFirstName(), user.getLastName()));
@@ -35,7 +35,18 @@ public class UserServiceImpl implements UserService {
         String generatePassword = Utils.generatePassword();
         user.setPassword(passwordEncoder.encode(generatePassword));
         userRepository.save(user);
-        user.setPassword(generatePassword);
+//        user.setPassword(generatePassword);
+        log.info("User created successfully: {}", user);
+        return user;
+    }*/
+    @Override
+    public User createUser(User user) {
+        log.debug("Creating user: {}", user);
+        user.setUsername(generateUserName(user.getFirstName(), user.getLastName()));
+        user.setActive(true);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+//        user.setPassword(generatePassword);
         log.info("User created successfully: {}", user);
         return user;
     }

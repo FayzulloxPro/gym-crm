@@ -66,7 +66,7 @@ public class GlobalExceptionHandler {
                         request.getRequestURI(),
                         e.getMessage(),
                         null,
-                        400
+                        404
                 )
         );
     }

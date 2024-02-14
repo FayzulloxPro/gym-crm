@@ -57,9 +57,9 @@ class TraineeControllerTest {
 
     @Test
     void createTrainee_ValidTraineeRegistrationDto_CreatedSuccessfully() {
-        TraineeRegistrationDto traineeRegistrationDto = new TraineeRegistrationDto("John", "Doe", new Date(), "address");
+        TraineeRegistrationDto traineeRegistrationDto = new TraineeRegistrationDto("John", "Doe", "password", new Date(), "address");
 
-        when(userMapper.toUser(traineeRegistrationDto.getFirstName(), traineeRegistrationDto.getLastName())).thenReturn(new User());
+        when(userMapper.toUser(traineeRegistrationDto)).thenReturn(new User());
         when(traineeMapper.toTraineeResponseDto(any(Trainee.class))).thenReturn(new TraineeResponseDto());
         when(traineeService.createTrainee(any(Trainee.class))).thenReturn(new Trainee());
 
