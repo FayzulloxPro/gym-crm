@@ -8,6 +8,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.Keys;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
@@ -19,24 +20,31 @@ public class JwtUtilsTest {
 
     private JwtUtils jwtUtils;
 
+    @Value("${jwt.access.token.secret.key}")
+    private String secretKey;
+    @Value("${jwt.access.token.expiry}")
+    private long expiryInMinutes;
+
+    @Value("${jwt.refresh.token.expiry}")
+    private long refreshTokenExpiry;
+    @Value("${jwt.refresh.token.secret.key}")
+    public String REFRESH_TOKEN_SECRET_KEY;
+
     @BeforeEach
     public void setUp() {
         jwtUtils = new JwtUtils();
-        jwtUtils.REFRESH_TOKEN_SECRET_KEY = "refresh_token_secret_key";
-        jwtUtils.setSecretKey("access_token_secret_key");
-        jwtUtils.setExpiryInMinutes(60); // 1 hour
-        jwtUtils.setRefreshTokenExpiry(60 * 24 * 30);// 30 days
+        jwtUtils.REFRESH_TOKEN_SECRET_KEY = REFRESH_TOKEN_SECRET_KEY;
+        jwtUtils.setSecretKey(secretKey);
+        jwtUtils.setExpiryInMinutes(expiryInMinutes);
+        jwtUtils.setRefreshTokenExpiry(refreshTokenExpiry);
     }
 
     @Test
     public void testGenerateToken() {
-        // Arrange
         String username = "testuser";
 
-        // Act
         TokenResponse tokenResponse = jwtUtils.generateToken(username);
 
-        // Assert
         assertNotNull(tokenResponse);
         assertNotNull(tokenResponse.getAccessToken());
         assertNotNull(tokenResponse.getRefreshToken());
@@ -44,79 +52,61 @@ public class JwtUtilsTest {
 
     @Test
     public void testGenerateAccessToken() {
-        // Arrange
         String username = "testuser";
         TokenResponse tokenResponse = new TokenResponse();
 
-        // Act
         jwtUtils.generateAccessToken(username, tokenResponse);
 
-        // Assert
         assertNotNull(tokenResponse.getAccessToken());
     }
 
     @Test
     public void testGenerateRefreshToken() {
-        // Arrange
         String username = "testuser";
         TokenResponse tokenResponse = new TokenResponse();
 
-        // Act
         jwtUtils.generateRefreshToken(username, tokenResponse);
 
-        // Assert
         assertNotNull(tokenResponse.getRefreshToken());
     }
 
     @Test
     public void testIsTokenValid() {
-        // Arrange
         String token = generateAccessToken("testuser");
         TokenType tokenType = TokenType.ACCESS;
 
-        // Act
         boolean isValid = jwtUtils.isTokenValid(token, tokenType);
 
-        // Assert
         assertTrue(isValid);
     }
 
     @Test
     public void testIsTokenValidExpired() {
-        // Arrange
         String token = generateExpiredAccessToken("testuser");
         TokenType tokenType = TokenType.ACCESS;
 
-        // Act
         boolean isValid = jwtUtils.isTokenValid(token, tokenType);
 
-        // Assert
         assertFalse(isValid);
     }
 
     @Test
     public void testGetUsername() {
-        // Arrange
         String token = generateAccessToken("testuser");
         TokenType tokenType = TokenType.ACCESS;
 
-        // Act
         String username = jwtUtils.getUsername(token, tokenType);
 
-        // Assert
         assertEquals("testuser", username);
     }
 
     @Test
     public void testGetExpiry() {
-        // Arrange
         String token = generateAccessToken("testuser");
         TokenType tokenType = TokenType.ACCESS;
 
-        // Act
         Date expiry = jwtUtils.getExpiry(token, tokenType);
 
-        // Assert
         assertNotNull(expiry);
     }
 
@@ -125,7 +115,7 @@ public class JwtUtilsTest {
         return io.jsonwebtoken.Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
                 .setIssuer("https://example.com")
                 .signWith(key)
                 .compact();
@@ -136,7 +126,7 @@ public class JwtUtilsTest {
         return io.jsonwebtoken.Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() - 1000)) // Expired token
+                .setExpiration(new Date(System.currentTimeMillis() - 1000))
                 .setIssuer("https://example.com")
                 .signWith(key)
                 .compact();
