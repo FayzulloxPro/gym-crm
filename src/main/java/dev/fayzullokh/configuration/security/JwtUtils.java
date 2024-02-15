@@ -94,7 +94,7 @@ public class JwtUtils {
         return false;
     }
 
-    private Claims getClaims(String token, TokenType tokenType) {
+    Claims getClaims(String token, TokenType tokenType) {
         return Jwts.parserBuilder()
                 .setSigningKey(signKey(tokenType))
                 .build()
@@ -102,7 +102,7 @@ public class JwtUtils {
                 .getBody();
     }
 
-    private Key signKey(TokenType tokenType) {
+    Key signKey(TokenType tokenType) {
         byte[] bytes = Decoders.BASE64.decode(tokenType.equals(ACCESS) ? secretKey : REFRESH_TOKEN_SECRET_KEY);
         return Keys.hmacShaKeyFor(bytes);
     }
