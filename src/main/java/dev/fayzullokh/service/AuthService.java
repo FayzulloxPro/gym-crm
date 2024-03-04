@@ -58,7 +58,7 @@ public class AuthService {
         protectionService.loginSucceeded(username);
         return jwtTokenUtil.generateToken(username);
     }
-    // for fun
+    // for fun fdgdfg
     @Timed(value = "auth_service_refresh_token_time", description = "Time taken to refresh token")
     public TokenResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
         String refreshToken = refreshTokenRequest.refreshToken();
