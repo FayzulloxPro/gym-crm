@@ -44,6 +44,10 @@ public class AuthService {
             throw new UsernameNotFoundException("Username '%s' not found".formatted(username));
         }
 
+        if (protectionService.isAccountLocked(username)) {
+            throw new LockedException("Account locked, please try again later");
+        }
+
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
 
         try {
@@ -52,13 +56,10 @@ public class AuthService {
             protectionService.loginFailed(username);
             throw new BadCredentialsException("Bad credentials");
         }
-        if (protectionService.isAccountLocked(username)) {
-            throw new LockedException("Account locked, please try again later");
-        }
         protectionService.loginSucceeded(username);
         return jwtTokenUtil.generateToken(username);
     }
-    // for fun fdgdfg
+
     @Timed(value = "auth_service_refresh_token_time", description = "Time taken to refresh token")
     public TokenResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
         String refreshToken = refreshTokenRequest.refreshToken();
@@ -83,5 +84,4 @@ public class AuthService {
 
         return jwtTokenUtil.generateAccessToken(username, tokenResponse);
     }
-// a
 }

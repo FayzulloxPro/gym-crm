@@ -6,6 +6,7 @@ import dev.fayzullokh.entity.Trainee;
 import dev.fayzullokh.entity.Trainer;
 import dev.fayzullokh.entity.Training;
 import dev.fayzullokh.entity.User;
+import dev.fayzullokh.exceptions.DuplicateUsernameException;
 import dev.fayzullokh.exceptions.NotFoundException;
 import dev.fayzullokh.exceptions.UnknownException;
 import dev.fayzullokh.mappers.TrainingMapper;
@@ -53,7 +54,7 @@ class TraineeServiceImplTest {
     }
 
     @Test
-    void testCreateTrainee_Success() throws UnknownException {
+    void testCreateTrainee_Success() throws UnknownException, DuplicateUsernameException {
         Trainee trainee = new Trainee();
         User user = new User();
         trainee.setUser(user);

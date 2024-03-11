@@ -13,7 +13,7 @@ public class BruteForceProtectionService {
     private final Map<String, Integer> loginAttempts = new HashMap<>();
     private final Map<String, Long> lockedUsers = new HashMap<>();
     private final int MAX_ATTEMPTS = 3;
-    private final long LOCK_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
+    private final long LOCK_DURATION = 1 * 60 * 1000; // 1 minute in milliseconds
 
     public void loginFailed(String username) {
         Long l = lockedUsers.get(username);
