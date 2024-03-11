@@ -1,5 +1,6 @@
 package dev.fayzullokh.configuration.security;
 
+import dev.fayzullokh.configuration.JwtTokenBlacklist;
 import dev.fayzullokh.enums.TokenType;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -39,11 +40,12 @@ class JWTAuthenticationFilterTest {
     private FilterChain filterChain;
 
     private JWTAuthenticationFilter jwtAuthenticationFilter;
+    private JwtTokenBlacklist jwtTokenBlacklist;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        jwtAuthenticationFilter = new JWTAuthenticationFilter(jwtUtils, userDetailsService);
+        jwtAuthenticationFilter = new JWTAuthenticationFilter(jwtUtils, userDetailsService, jwtTokenBlacklist);
     }
 
     @Test
