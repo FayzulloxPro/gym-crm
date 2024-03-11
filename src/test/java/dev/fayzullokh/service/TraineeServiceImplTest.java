@@ -7,6 +7,7 @@ import dev.fayzullokh.entity.Trainer;
 import dev.fayzullokh.entity.Training;
 import dev.fayzullokh.entity.User;
 import dev.fayzullokh.exceptions.NotFoundException;
+import dev.fayzullokh.exceptions.UnknownException;
 import dev.fayzullokh.mappers.TrainingMapper;
 import dev.fayzullokh.repositories.TraineeRepository;
 import dev.fayzullokh.repositories.TrainingRepository;
@@ -52,7 +53,7 @@ class TraineeServiceImplTest {
     }
 
     @Test
-    void testCreateTrainee_Success() {
+    void testCreateTrainee_Success() throws UnknownException {
         Trainee trainee = new Trainee();
         User user = new User();
         trainee.setUser(user);

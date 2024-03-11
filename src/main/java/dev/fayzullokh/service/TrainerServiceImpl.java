@@ -3,7 +3,9 @@ package dev.fayzullokh.service;
 import dev.fayzullokh.dtos.TrainerUpdateDto;
 import dev.fayzullokh.dtos.TrainingResponseDto;
 import dev.fayzullokh.entity.*;
+import dev.fayzullokh.exceptions.DuplicateUsernameException;
 import dev.fayzullokh.exceptions.NotFoundException;
+import dev.fayzullokh.exceptions.UnknownException;
 import dev.fayzullokh.mappers.TrainingMapper;
 import dev.fayzullokh.repositories.TrainerRepository;
 import dev.fayzullokh.repositories.TrainingRepository;
@@ -36,7 +38,7 @@ public class TrainerServiceImpl implements TrainerService {
         this.trainerRepository = trainerRepository;
     }
 
-    public Trainer createTrainer(Trainer trainer) {
+    public Trainer createTrainer(Trainer trainer) throws UnknownException, DuplicateUsernameException {
         LOGGER.debug("TrainerServiceImpl: createTrainer({})", trainer);
         User user = trainer.getUser();
         user = userService.createUser(user);

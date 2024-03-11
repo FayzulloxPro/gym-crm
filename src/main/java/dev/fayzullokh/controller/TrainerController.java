@@ -5,7 +5,9 @@ import dev.fayzullokh.entity.Trainee;
 import dev.fayzullokh.entity.Trainer;
 import dev.fayzullokh.entity.TrainingType;
 import dev.fayzullokh.entity.User;
+import dev.fayzullokh.exceptions.DuplicateUsernameException;
 import dev.fayzullokh.exceptions.NotFoundException;
+import dev.fayzullokh.exceptions.UnknownException;
 import dev.fayzullokh.mappers.TrainerMapper;
 import dev.fayzullokh.mappers.UserMapper;
 import dev.fayzullokh.service.TrainerService;
@@ -53,7 +55,7 @@ public class TrainerController {
             }
     )
     @PostMapping
-    public ResponseEntity<CreatedResponseDTO> createTrainer(@RequestBody @Valid TrainerRegistrationDto dto) throws NotFoundException {
+    public ResponseEntity<CreatedResponseDTO> createTrainer(@RequestBody @Valid TrainerRegistrationDto dto) throws NotFoundException, UnknownException, DuplicateUsernameException {
         log.info("Received request to register trainer with DTO: {}", dto);
         User user = userMapper.toUser(dto.getFirstName(), dto.getLastName());
         TrainingType trainingType = trainingTypeService.findById(dto.getTrainingTypeId());

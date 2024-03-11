@@ -5,13 +5,15 @@ import dev.fayzullokh.dtos.TrainerResponseDto;
 import dev.fayzullokh.dtos.TrainingResponseDto;
 import dev.fayzullokh.entity.Trainee;
 import dev.fayzullokh.entity.Trainer;
+import dev.fayzullokh.exceptions.DuplicateUsernameException;
 import dev.fayzullokh.exceptions.NotFoundException;
+import dev.fayzullokh.exceptions.UnknownException;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface TraineeService {
-    Trainee createTrainee(Trainee trainee);
+    Trainee createTrainee(Trainee trainee) throws UnknownException, DuplicateUsernameException;
 
     Trainee getTraineeById(Long id) throws NotFoundException;
 

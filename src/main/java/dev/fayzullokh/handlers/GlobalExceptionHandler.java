@@ -3,6 +3,7 @@ package dev.fayzullokh.handlers;
 import dev.fayzullokh.dtos.AppErrorDTO;
 import dev.fayzullokh.exceptions.DuplicateUsernameException;
 import dev.fayzullokh.exceptions.NotFoundException;
+import dev.fayzullokh.exceptions.UnknownException;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,19 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<AppErrorDTO> handleUnknownExceptions(Exception e, HttpServletRequest request) {
+        log.error("Unknown exception occurred", e);
+        return ResponseEntity.badRequest().body(
+                new AppErrorDTO(
+                        request.getRequestURI(),
+                        e.getMessage(),
+                        null,
+                        400
+                )
+        );
+    }
+
+    @ExceptionHandler(UnknownException.class)
+    public ResponseEntity<AppErrorDTO> handleUnknownException(UnknownException e, HttpServletRequest request) {
         log.error("Unknown exception occurred", e);
         return ResponseEntity.badRequest().body(
                 new AppErrorDTO(

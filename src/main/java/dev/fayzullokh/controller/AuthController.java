@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +32,7 @@ public class AuthController {
             @ApiResponse(responseCode = "200", description = "Access token generated", content = @Content(schema = @Schema(implementation = TokenResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = AppErrorDTO.class)))
     })
-    @PostMapping("/access/token")
+    @PostMapping("/login")
     public ResponseEntity<TokenResponse> generateToken(@Valid @RequestBody TokenRequest tokenRequest) throws NotFoundException {
         log.info("Generating token for request: {}", tokenRequest);
         return ResponseEntity.ok(authService.generateToken(tokenRequest));
@@ -48,4 +49,13 @@ public class AuthController {
         log.info("Refreshing token for request: {}", refreshTokenRequest);
         return ResponseEntity.ok(authService.refreshToken(refreshTokenRequest));
     }
+
+    /*@PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        String token = jwtTokenProvider.resolveToken(request);
+        if (token != null) {
+            tokenBlacklist.invalidateToken(token);
+        }
+        return ResponseEntity.ok("Logged out successfully");
+    }*/
 }

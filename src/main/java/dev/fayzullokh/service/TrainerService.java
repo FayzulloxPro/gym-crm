@@ -4,13 +4,15 @@ import dev.fayzullokh.dtos.TrainerUpdateDto;
 import dev.fayzullokh.dtos.TrainingResponseDto;
 import dev.fayzullokh.entity.Trainee;
 import dev.fayzullokh.entity.Trainer;
+import dev.fayzullokh.exceptions.DuplicateUsernameException;
 import dev.fayzullokh.exceptions.NotFoundException;
+import dev.fayzullokh.exceptions.UnknownException;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface TrainerService {
-    Trainer createTrainer(Trainer trainer);
+    Trainer createTrainer(Trainer trainer) throws UnknownException, DuplicateUsernameException;
 
     Trainer getTrainerById(Long id) throws NotFoundException;
 

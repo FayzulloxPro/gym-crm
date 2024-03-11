@@ -4,7 +4,9 @@ import dev.fayzullokh.dtos.*;
 import dev.fayzullokh.entity.Trainee;
 import dev.fayzullokh.entity.Trainer;
 import dev.fayzullokh.entity.User;
+import dev.fayzullokh.exceptions.DuplicateUsernameException;
 import dev.fayzullokh.exceptions.NotFoundException;
+import dev.fayzullokh.exceptions.UnknownException;
 import dev.fayzullokh.mappers.TraineeMapper;
 import dev.fayzullokh.mappers.TrainerMapper;
 import dev.fayzullokh.mappers.UserMapper;
@@ -56,7 +58,7 @@ public class TraineeController {
             }
     )
     @PostMapping
-    public ResponseEntity<CreatedResponseDTO> createTrainee(@RequestBody @Valid TraineeRegistrationDto dto) {
+    public ResponseEntity<CreatedResponseDTO> createTrainee(@RequestBody @Valid TraineeRegistrationDto dto) throws UnknownException, DuplicateUsernameException {
         log.info("Received request to create trainee with DTO: {}", dto);
         User user = userMapper.toUser(dto.getFirstName(), dto.getLastName());
         Trainee trainee = traineeMapper.toTrainee(dto, user);

@@ -6,7 +6,9 @@ import dev.fayzullokh.entity.Trainee;
 import dev.fayzullokh.entity.Trainer;
 import dev.fayzullokh.entity.Training;
 import dev.fayzullokh.entity.User;
+import dev.fayzullokh.exceptions.DuplicateUsernameException;
 import dev.fayzullokh.exceptions.NotFoundException;
+import dev.fayzullokh.exceptions.UnknownException;
 import dev.fayzullokh.mappers.TrainingMapper;
 import dev.fayzullokh.repositories.TraineeRepository;
 import dev.fayzullokh.repositories.TrainingRepository;
@@ -29,7 +31,7 @@ public class TraineeServiceImpl implements TraineeService {
     private final TrainerServiceImpl trainerService;
 
 
-    public Trainee createTrainee(Trainee trainee) {
+    public Trainee createTrainee(Trainee trainee) throws UnknownException, DuplicateUsernameException {
         log.debug("Trainee: createTrainee({})", trainee);
         User user = trainee.getUser();
         User savedUser = userService.createUser(user);

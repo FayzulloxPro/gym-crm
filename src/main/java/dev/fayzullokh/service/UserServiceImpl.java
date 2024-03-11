@@ -3,7 +3,9 @@ package dev.fayzullokh.service;
 import dev.fayzullokh.configuration.security.SessionUser;
 import dev.fayzullokh.dtos.ChangePasswordRequest;
 import dev.fayzullokh.entity.User;
+import dev.fayzullokh.exceptions.DuplicateUsernameException;
 import dev.fayzullokh.exceptions.NotFoundException;
+import dev.fayzullokh.exceptions.UnknownException;
 import dev.fayzullokh.repositories.UserRepository;
 import dev.fayzullokh.utils.Utils;
 import lombok.extern.slf4j.Slf4j;
@@ -28,13 +30,20 @@ public class UserServiceImpl implements UserService {
     private SessionUser sessionUser;
 
     @Override
-    public User createUser(User user) {
+    public User createUser(User user) throws UnknownException, DuplicateUsernameException {
         log.debug("Creating user: {}", user);
         user.setUsername(generateUserName(user.getFirstName(), user.getLastName()));
         user.setActive(true);
         String generatePassword = Utils.generatePassword();
         user.setPassword(passwordEncoder.encode(generatePassword));
-        userRepository.save(user);
+        try {
+            userRepository.save(user);
+        }catch (Exception e){
+            if (e.getMessage().equals("duplicate key value violates")) {
+                throw new DuplicateUsernameException("User already exists with '%s' username".formatted(user.getUsername()));
+            }
+            throw new UnknownException("Something went wrong");
+        }
         user.setPassword(generatePassword);
         log.info("User created successfully: {}", user);
         return user;
