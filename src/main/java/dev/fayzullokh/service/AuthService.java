@@ -1,5 +1,6 @@
 package dev.fayzullokh.service;
 
+import dev.fayzullokh.configuration.JwtTokenBlacklist;
 import dev.fayzullokh.configuration.security.JwtUtils;
 import dev.fayzullokh.dtos.auth.RefreshTokenRequest;
 import dev.fayzullokh.dtos.auth.TokenRequest;
@@ -10,6 +11,7 @@ import dev.fayzullokh.exceptions.NotFoundException;
 import dev.fayzullokh.repositories.UserRepository;
 import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
@@ -30,6 +32,7 @@ public class AuthService {
     private final JwtUtils jwtTokenUtil;
     private final BruteForceProtectionService protectionService;
     private final AuthenticationManager authenticationManager;
+    private final JwtTokenBlacklist tokenBlacklist;
 
     @Timed(value = "auth_service_generate_token_time", description = "Time taken to generate token")
     @Counted(value = "auth_service_generate_token_count", description = "Number of times generateToken method is called")
@@ -83,5 +86,22 @@ public class AuthService {
                 .build();
 
         return jwtTokenUtil.generateAccessToken(username, tokenResponse);
+    }
+
+    public String logout(HttpServletRequest request) {
+        String token = resolveToken(request);
+        if (token != null) {
+            tokenBlacklist.invalidateToken(token);
+            return "Logout successful";
+        }
+        return "Invalid token";
+    }
+
+    private String resolveToken(HttpServletRequest request){
+        String authHeader = request.getHeader("Authorization");
+        if (Objects.isNull(authHeader) || !authHeader.startsWith("Bearer ")) {
+            return null;
+        }
+        return authHeader.substring(7);
     }
 }

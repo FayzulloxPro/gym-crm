@@ -50,12 +50,8 @@ public class AuthController {
         return ResponseEntity.ok(authService.refreshToken(refreshTokenRequest));
     }
 
-    /*@PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletRequest request) {
-        String token = jwtTokenProvider.resolveToken(request);
-        if (token != null) {
-            tokenBlacklist.invalidateToken(token);
-        }
-        return ResponseEntity.ok("Logged out successfully");
-    }*/
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        return ResponseEntity.ok(authService.logout(request));
+    }
 }

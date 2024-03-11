@@ -1,6 +1,7 @@
 package dev.fayzullokh.configuration.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.fayzullokh.configuration.JwtTokenBlacklist;
 import dev.fayzullokh.dtos.AppErrorDTO;
 import dev.fayzullokh.repositories.UserRepository;
 import jakarta.persistence.EntityManagerFactory;
@@ -38,6 +39,7 @@ public class SecurityConfigurer {
     private final JwtUtils jwtTokenUtil;
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
+    private final JwtTokenBlacklist jwtTokenBlacklist;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -72,7 +74,7 @@ public class SecurityConfigurer {
                 .authenticationEntryPoint(authenticationEntryPoint())
                 .accessDeniedHandler(accessDeniedHandler())
                 .and()
-                .addFilterBefore(new JWTAuthenticationFilter(jwtTokenUtil, userDetailsService()), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JWTAuthenticationFilter(jwtTokenUtil, userDetailsService(), jwtTokenBlacklist), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

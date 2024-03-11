@@ -1,5 +1,6 @@
 package dev.fayzullokh.configuration.security;
 
+import dev.fayzullokh.configuration.JwtTokenBlacklist;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +27,7 @@ import static dev.fayzullokh.enums.TokenType.ACCESS;
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private final JwtUtils jwtUtils;
     private final UserDetailsService userDetailsService;
-
+    private final JwtTokenBlacklist jwtTokenBlacklist;
 
 
     @Override
@@ -40,9 +41,13 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         final String JWToken = authHeader.substring(7);
+        if (jwtTokenBlacklist.isTokenInvalid(JWToken)){
+            filterChain.doFilter(request,response);
+            return;
+        }
         final String username = jwtUtils.getUsername(JWToken, ACCESS);
 
-        if (username != null ) {
+        if (username != null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if (jwtUtils.isTokenValid(JWToken, ACCESS)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
