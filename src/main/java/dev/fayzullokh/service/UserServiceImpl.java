@@ -34,8 +34,8 @@ public class UserServiceImpl implements UserService {
         log.debug("Creating user: {}", user);
         user.setUsername(generateUserName(user.getFirstName(), user.getLastName()));
         user.setActive(true);
-        String generatePassword = Utils.generatePassword();
-        user.setPassword(passwordEncoder.encode(generatePassword));
+//        String generatePassword = Utils.generatePassword();
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         try {
             userRepository.save(user);
         }catch (Exception e){
@@ -44,7 +44,6 @@ public class UserServiceImpl implements UserService {
             }
             throw new UnknownException("Something went wrong");
         }
-        user.setPassword(generatePassword);
         log.info("User created successfully: {}", user);
         return user;
     }

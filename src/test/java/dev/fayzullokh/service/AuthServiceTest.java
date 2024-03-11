@@ -66,7 +66,7 @@ public class AuthServiceTest {
     @Test
     void testGenerateToken_InvalidCredentials_ThrowsBadCredentialsException() {
         TokenRequest tokenRequest = new TokenRequest("invalidUsername", "invalidPassword");
-        when(authUserRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+        when(authUserRepository.findByUsername(anyString())).thenReturn(null);
 
         assertThrows(UsernameNotFoundException.class, () -> authService.generateToken(tokenRequest));
         verify(authUserRepository, times(1)).findByUsername(anyString());
@@ -79,7 +79,7 @@ public class AuthServiceTest {
         RefreshTokenRequest refreshTokenRequest = new RefreshTokenRequest("validRefreshToken");
         when(jwtTokenUtil.isValid(anyString(), eq(TokenType.REFRESH))).thenReturn(true);
         when(jwtTokenUtil.getUsername(anyString(), eq(TokenType.REFRESH))).thenReturn("validUsername");
-        when(authUserRepository.findByUsername(anyString())).thenReturn(Optional.of(new User()));
+        when(authUserRepository.findByUsername(anyString())).thenReturn(new User());
         when(jwtTokenUtil.generateAccessToken(anyString(), any(TokenResponse.class))).thenReturn(new TokenResponse());
 
         TokenResponse result = authService.refreshToken(refreshTokenRequest);

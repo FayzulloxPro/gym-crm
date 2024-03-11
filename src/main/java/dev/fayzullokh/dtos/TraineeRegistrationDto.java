@@ -24,6 +24,10 @@ public class TraineeRegistrationDto {
     @Size(max = 255, message = "Last name cannot exceed 255 characters")
     private String lastName;
 
+    @NotBlank(message = "Password cannot be blank")
+    @Size(max = 255, message = "Password cannot exceed 255 characters")
+    private String password;
+
     @Past(message = "Date of birth must be in the past")
     private Date dateOfBirth;
 

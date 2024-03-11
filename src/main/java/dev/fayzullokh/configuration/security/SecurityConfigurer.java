@@ -126,12 +126,11 @@ public class SecurityConfigurer {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-            /*configuration.setAllowedOriginPatterns(List.of(
-    //                "http://localhost:8080",
-    //                "http://localhost:9090",
-    //                "http://localhost:9095"
-                    "*"
-            ));*/
+            configuration.setAllowedOriginPatterns(List.of(
+                    "http://localhost:8080",
+                    "http://localhost:9090",
+                    "http://localhost:9095"
+            ));
         configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
         configuration.setAllowedHeaders(List.of("*"
                     /*"Accept",
@@ -161,22 +160,12 @@ public class SecurityConfigurer {
         return new ProviderManager(authenticationProvider());
     }
 
-
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> {
+        return userRepository::findByUsername;
+        /*return username -> {
             dev.fayzullokh.entity.User authUser = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
             return new User(authUser.getUsername(), authUser.getPassword(), Collections.emptyList());
-        };
+        };*/
     }
-
-   /* @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetailsService findByUsername = userRepository::findByUsername;
-        if (findByUsername == null) {
-            throw new UsernameNotFoundException("User not found with username: " + username);
-        }
-        return findByUsername;
-    }*/
-
 }

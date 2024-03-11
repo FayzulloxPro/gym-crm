@@ -60,7 +60,7 @@ public class TraineeController {
     @PostMapping
     public ResponseEntity<CreatedResponseDTO> createTrainee(@RequestBody @Valid TraineeRegistrationDto dto) throws UnknownException, DuplicateUsernameException {
         log.info("Received request to create trainee with DTO: {}", dto);
-        User user = userMapper.toUser(dto.getFirstName(), dto.getLastName());
+        User user = userMapper.toUser(dto);
         Trainee trainee = traineeMapper.toTrainee(dto, user);
         Trainee traineeServiceTrainee = traineeService.createTrainee(trainee);
         CreatedResponseDTO createdTrainee = traineeMapper.toCreatedResponseDTO(traineeServiceTrainee);

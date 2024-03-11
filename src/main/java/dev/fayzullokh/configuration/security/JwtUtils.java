@@ -7,6 +7,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,8 @@ import java.util.Date;
 import static dev.fayzullokh.enums.TokenType.ACCESS;
 import static dev.fayzullokh.enums.TokenType.REFRESH;
 
+@Setter
+@Getter
 @Service
 public class JwtUtils {
 
@@ -90,7 +94,7 @@ public class JwtUtils {
         return false;
     }
 
-    private Claims getClaims(String token, TokenType tokenType) {
+    Claims getClaims(String token, TokenType tokenType) {
         return Jwts.parserBuilder()
                 .setSigningKey(signKey(tokenType))
                 .build()
@@ -98,7 +102,7 @@ public class JwtUtils {
                 .getBody();
     }
 
-    private Key signKey(TokenType tokenType) {
+    Key signKey(TokenType tokenType) {
         byte[] bytes = Decoders.BASE64.decode(tokenType.equals(ACCESS) ? secretKey : REFRESH_TOKEN_SECRET_KEY);
         return Keys.hmacShaKeyFor(bytes);
     }

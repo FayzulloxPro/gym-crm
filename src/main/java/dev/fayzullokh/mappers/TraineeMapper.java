@@ -61,7 +61,6 @@ public class TraineeMapper {
         User user = trainee.getUser();
         return CreatedResponseDTO.builder()
                 .username(user.getUsername())
-                .password(user.getPassword())
                 .build();
     }
 

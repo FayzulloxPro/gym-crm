@@ -24,5 +24,9 @@ public class TrainerRegistrationDto {
     @NotNull(message = "Training type ID cannot be null")
     private Long trainingTypeId;
 
+    @NotBlank(message = "Password cannot be blank")
+    @Size(max = 255, message = "Password cannot exceed 255 characters")
+    private String password;
+
 }
 

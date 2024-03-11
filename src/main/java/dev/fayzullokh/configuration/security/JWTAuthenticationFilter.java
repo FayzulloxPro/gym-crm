@@ -27,10 +27,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private final JwtUtils jwtUtils;
     private final UserDetailsService userDetailsService;
 
-    private static final int MAX_ATTEMPTS = 3;
-    private static final long BLOCK_DURATION = TimeUnit.MINUTES.toMillis(5);
-
-    private final ConcurrentHashMap<String, Integer> loginAttemptsCache = new ConcurrentHashMap<>();
 
 
     @Override
@@ -59,8 +55,4 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     }
 
 
-    private boolean isBlocked(String username) {
-        Integer attempts = loginAttemptsCache.get(username);
-        return attempts != null && attempts >= MAX_ATTEMPTS;
-    }
 }

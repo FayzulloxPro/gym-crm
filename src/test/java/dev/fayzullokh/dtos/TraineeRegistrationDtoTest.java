@@ -30,6 +30,7 @@ public class TraineeRegistrationDtoTest {
                 .lastName("Doe")
                 .dateOfBirth(new Date())
                 .address("123 Main St")
+                .password("password")
                 .build();
 
         Set<ConstraintViolation<TraineeRegistrationDto>> violations = validator.validate(dto);
@@ -48,6 +49,6 @@ public class TraineeRegistrationDtoTest {
 
         Set<ConstraintViolation<TraineeRegistrationDto>> violations = validator.validate(dto);
 
-        assertEquals(2, violations.size(), "There should be two validation violations");
+        assertEquals(3, violations.size(), "There should be two validation violations");
     }
 }
