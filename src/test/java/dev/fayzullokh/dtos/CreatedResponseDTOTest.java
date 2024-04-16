@@ -23,7 +23,6 @@ public class CreatedResponseDTOTest {
         // Arrange
         CreatedResponseDTO dto = CreatedResponseDTO.builder()
                 .username("john_doe")
-                .password("secretpassword")
                 .build();
 
         // Act & Assert
@@ -32,7 +31,6 @@ public class CreatedResponseDTOTest {
             // No exception should be thrown
             // Getter methods can be called without any issues
             assertEquals("john_doe", dto.getUsername());
-            assertEquals("secretpassword", dto.getPassword());
         });
     }
 
@@ -41,7 +39,6 @@ public class CreatedResponseDTOTest {
         // Arrange
         CreatedResponseDTO dto = CreatedResponseDTO.builder()
                 .username("")  // Blank username, violating the @NotBlank constraint
-                .password("secretpassword")
                 .build();
 
         // Act & Assert

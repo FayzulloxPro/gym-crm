@@ -4,7 +4,9 @@ import dev.fayzullokh.dtos.*;
 import dev.fayzullokh.entity.Trainer;
 import dev.fayzullokh.entity.TrainingType;
 import dev.fayzullokh.entity.User;
+import dev.fayzullokh.exceptions.DuplicateUsernameException;
 import dev.fayzullokh.exceptions.NotFoundException;
+import dev.fayzullokh.exceptions.UnknownException;
 import dev.fayzullokh.mappers.TrainerMapper;
 import dev.fayzullokh.mappers.UserMapper;
 import dev.fayzullokh.service.TrainerService;
@@ -53,7 +55,7 @@ class TrainerControllerTest {
     }
 
     @Test
-    void createTrainer_ValidTrainerRegistrationDto_CreatedSuccessfully() throws NotFoundException {
+    void createTrainer_ValidTrainerRegistrationDto_CreatedSuccessfully() throws NotFoundException, UnknownException, DuplicateUsernameException {
         TrainerRegistrationDto trainerRegistrationDto = new TrainerRegistrationDto("John", "Doe", 1L, "password");
 
         when(userService.getUserById(anyLong())).thenReturn(new User());

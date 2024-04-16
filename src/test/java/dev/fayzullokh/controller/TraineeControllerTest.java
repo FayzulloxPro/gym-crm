@@ -4,7 +4,9 @@ import dev.fayzullokh.dtos.*;
 import dev.fayzullokh.entity.Trainee;
 import dev.fayzullokh.entity.Trainer;
 import dev.fayzullokh.entity.User;
+import dev.fayzullokh.exceptions.DuplicateUsernameException;
 import dev.fayzullokh.exceptions.NotFoundException;
+import dev.fayzullokh.exceptions.UnknownException;
 import dev.fayzullokh.mappers.TraineeMapper;
 import dev.fayzullokh.mappers.TrainerMapper;
 import dev.fayzullokh.mappers.UserMapper;
@@ -56,7 +58,7 @@ class TraineeControllerTest {
     }
 
     @Test
-    void createTrainee_ValidTraineeRegistrationDto_CreatedSuccessfully() {
+    void createTrainee_ValidTraineeRegistrationDto_CreatedSuccessfully() throws UnknownException, DuplicateUsernameException {
         TraineeRegistrationDto traineeRegistrationDto = new TraineeRegistrationDto("John", "Doe", "password", new Date(), "address");
 
         when(userMapper.toUser(traineeRegistrationDto)).thenReturn(new User());

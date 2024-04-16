@@ -34,15 +34,3 @@ management:
   endpoint:
     health:
       show-components: when_authorized
-#      show-details: when_authorized
-#      probes:
-#        enabled: true
-#      management:
-#        health:
-#          custom:
-#            db:
-#              enabled: true
-#            diskspace:
-#              enabled: true
-#            mail:
-#              enabled: true

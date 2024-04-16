@@ -3,7 +3,9 @@ package dev.fayzullokh.service;
 import dev.fayzullokh.configuration.security.SessionUser;
 import dev.fayzullokh.dtos.ChangePasswordRequest;
 import dev.fayzullokh.entity.User;
+import dev.fayzullokh.exceptions.DuplicateUsernameException;
 import dev.fayzullokh.exceptions.NotFoundException;
+import dev.fayzullokh.exceptions.UnknownException;
 import dev.fayzullokh.repositories.UserRepository;
 import dev.fayzullokh.utils.Utils;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +43,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testCreateUser_Success() {
+    void testCreateUser_Success() throws UnknownException, DuplicateUsernameException {
         User user = new User();
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
         when(userRepository.save(any(User.class))).thenReturn(user);

@@ -97,7 +97,6 @@ public class TrainerMapperTest {
         // Assert
         assertNotNull(createdResponseDTO);
         assertEquals(user.getUsername(), createdResponseDTO.getUsername());
-        assertEquals(user.getPassword(), createdResponseDTO.getPassword());
     }
 
     @Test
