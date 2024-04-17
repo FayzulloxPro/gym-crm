@@ -10,6 +10,7 @@ import dev.fayzullokh.repositories.TrainingRepository;
 import dev.fayzullokh.repositories.TrainingTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class TrainingServiceImpl implements TrainingService{
     private final TrainerServiceImpl trainerService;
     private final TrainingRepository trainingRepository;
     private final TrainingTypeRepository trainingTypeRepository;
+    private final RestTemplate restTemplate;
 
     @Override
     public void addTraining(TrainingRequestDto trainingRequestDto) throws NotFoundException {
@@ -33,6 +35,10 @@ public class TrainingServiceImpl implements TrainingService{
         training.setDate(trainingRequestDto.getTrainingDate());
         training.setDuration(trainingRequestDto.getTrainingDuration());
         trainingRepository.save(training);
+
+        //todo call secondary microservice
+        restTemplate.postForObject("http://localhost:8088/modify", training, Training.class);
+            
     }
 
     @Override
