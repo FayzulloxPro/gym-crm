@@ -3,6 +3,7 @@ package dev.fayzullokh.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Builder
@@ -38,7 +39,7 @@ public class Training {
     private String name;
 
     @Column(name = "date")
-    private Date date;
+    private LocalDateTime date;
 
     @Column(name = "duration")
     private int duration;

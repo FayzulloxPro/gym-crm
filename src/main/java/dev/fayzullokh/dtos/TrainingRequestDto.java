@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -25,7 +26,7 @@ public class TrainingRequestDto {
     private String trainingName;
 
     @NotNull
-    private Date trainingDate;
+    private LocalDateTime trainingDate;
 
     @NotNull
     private Integer trainingDuration;
